@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Heart, Sparkles, Image as ImageIcon, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
+import photoList from './photoList.json';
 
 // Componente Principal
 function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'gallery' | 'curator'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'gallery'>('home');
   const [musicOn, setMusicOn] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -50,7 +51,6 @@ function App() {
           <nav className="hidden md:flex items-center gap-8 font-serif uppercase tracking-[3px] text-[0.8rem] text-gold-light opacity-80">
             <button onClick={() => setActiveTab('home')} className={`hover:text-gold transition-colors ${activeTab === 'home' ? 'text-gold' : ''}`}>Início</button>
             <button onClick={() => setActiveTab('gallery')} className={`hover:text-gold transition-colors ${activeTab === 'gallery' ? 'text-gold' : ''}`}>Galeria</button>
-            <button onClick={() => setActiveTab('curator')} className={`hover:text-gold transition-colors ${activeTab === 'curator' ? 'text-gold' : ''}`}>Curador</button>
           </nav>
 
           {/* Music Toggle */}
@@ -71,9 +71,8 @@ function App() {
       {/* Main Content Area */}
       <main className="relative z-10 pt-32 pb-24 px-6 max-w-6xl mx-auto min-h-screen flex flex-col">
         <AnimatePresence mode="wait">
-          {activeTab === 'home' && <HomeView key="home" onExplore={() => setActiveTab('curator')} />}
+          {activeTab === 'home' && <HomeView key="home" />}
           {activeTab === 'gallery' && <GalleryView key="gallery" />}
-          {activeTab === 'curator' && <CuratorView key="curator" />}
         </AnimatePresence>
       </main>
       
@@ -87,17 +86,13 @@ function App() {
           <ImageIcon size={20} />
           <span className="text-[0.6rem] uppercase tracking-widest">Galeria</span>
         </button>
-        <button onClick={() => setActiveTab('curator')} className={`flex flex-col items-center gap-1 ${activeTab === 'curator' ? 'text-gold' : 'text-gold-light/60'}`}>
-          <Sparkles size={20} />
-          <span className="text-[0.6rem] uppercase tracking-widest">Curador</span>
-        </button>
       </nav>
     </div>
   );
 }
 
 // Visualização: Home
-function HomeView({ onExplore }: { onExplore: () => void }) {
+function HomeView() {
   const [days, setDays] = useState(0);
 
   useEffect(() => {
@@ -123,18 +118,10 @@ function HomeView({ onExplore }: { onExplore: () => void }) {
         Arquivo afetivo integrado da nossa história
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-6 w-full max-w-md mt-8 mx-auto">
         <div className="p-8 border border-gold/15 rounded-sm bg-gold/5 backdrop-blur-sm text-center">
           <span className="font-display text-5xl text-gold block leading-none">{days}</span>
           <span className="font-serif text-[0.7rem] tracking-[4px] uppercase text-gold-light opacity-60 mt-3 block">Dias de Nós</span>
-        </div>
-        <div className="p-8 border border-gold/15 rounded-sm bg-gold/5 backdrop-blur-sm text-center flex flex-col justify-center cursor-pointer hover:border-gold/40 hover:bg-gold/10 transition-all" onClick={onExplore}>
-          <Sparkles className="mx-auto text-gold mb-3" size={32} />
-          <span className="font-serif text-[0.7rem] tracking-[4px] uppercase text-gold-light opacity-60 block">Consultar Curador</span>
-        </div>
-        <div className="p-8 border border-gold/15 rounded-sm bg-gold/5 backdrop-blur-sm text-center">
-          <span className="font-display text-5xl text-gold block leading-none">∞</span>
-          <span className="font-serif text-[0.7rem] tracking-[4px] uppercase text-gold-light opacity-60 mt-3 block">Momentos a Viver</span>
         </div>
       </div>
     </motion.div>
@@ -144,7 +131,7 @@ function HomeView({ onExplore }: { onExplore: () => void }) {
 // Visualização: Galeria
 function GalleryView() {
   // Array de fotos
-  const photos = Array.from({ length: 12 }, (_, i) => `/media/daiana_luis_foto_0${String(i + 1).padStart(2, '0')}.png`);
+  const photos = photoList.map(name => `/media/${name}`);
 
   return (
     <motion.div 
@@ -180,99 +167,6 @@ function GalleryView() {
   );
 }
 
-// Visualização: Curador Inteligente (Gemini AI)
-function CuratorView() {
-  const [query, setQuery] = useState('');
-  const [messages, setMessages] = useState<{role: 'user' | 'assistant', content: string}[]>([
-    { role: 'assistant', content: 'Olá! Sou o curador inteligente do arquivo afetivo de Daiana e Luis. Como posso ajudar a reviver uma memória hoje?' }
-  ]);
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim()) return;
-
-    const userQuery = query;
-    setQuery('');
-    setMessages(prev => [...prev, { role: 'user', content: userQuery }]);
-    setLoading(true);
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userQuery, history: messages })
-      });
-      
-      const data = await response.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Desculpe, tive um problema ao acessar os arquivos do coração no momento.' }]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <motion.div 
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.6 }}
-      className="w-full max-w-3xl mx-auto flex flex-col h-[calc(100vh-200px)]"
-    >
-      <div className="text-center mb-8">
-        <span className="font-serif text-[0.72rem] tracking-[6px] uppercase text-gold opacity-70 block mb-2">
-          Inteligência Emocional
-        </span>
-        <h2 className="font-display text-4xl md:text-5xl text-gold-light">Curador Afetivo</h2>
-      </div>
-
-      <div className="flex-1 bg-[#0a060880] backdrop-blur-md border border-gold/20 rounded-sm overflow-hidden flex flex-col">
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {messages.map((msg, idx) => (
-            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[80%] p-4 rounded-sm font-serif text-[1.1rem] leading-relaxed ${
-                msg.role === 'user' 
-                  ? 'bg-gold/10 border border-gold/30 text-gold-light' 
-                  : 'bg-white/5 border border-white/10 text-white/90'
-              }`}>
-                <ReactMarkdown>{msg.content}</ReactMarkdown>
-              </div>
-            </div>
-          ))}
-          {loading && (
-            <div className="flex justify-start">
-              <div className="bg-white/5 border border-white/10 text-white/90 p-4 rounded-sm flex gap-2">
-                <span className="w-2 h-2 rounded-full bg-gold/60 animate-bounce"></span>
-                <span className="w-2 h-2 rounded-full bg-gold/60 animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-                <span className="w-2 h-2 rounded-full bg-gold/60 animate-bounce" style={{ animationDelay: '0.4s' }}></span>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Input */}
-        <form onSubmit={handleSubmit} className="p-4 border-t border-gold/20 flex gap-4 bg-[#0a0608]">
-          <input 
-            type="text" 
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Pergunte sobre uma memória, data ou sentimento..." 
-            className="flex-1 bg-transparent border-b border-gold/30 px-2 py-3 font-serif text-lg text-gold-light focus:outline-none focus:border-gold transition-colors placeholder:text-gold/30"
-          />
-          <button 
-            type="submit"
-            disabled={loading || !query.trim()}
-            className="p-3 text-gold hover:text-gold-light disabled:opacity-50 transition-colors"
-          >
-            <Send size={24} />
-          </button>
-        </form>
-      </div>
-    </motion.div>
-  );
-}
 
 export default App;
