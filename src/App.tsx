@@ -1,11 +1,22 @@
-import { useState, useEffect } from 'react';
-import { Heart, Image as ImageIcon } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Play, Pause, Heart, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import photoList from './photoList.json';
 
 // Componente Principal
 function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'gallery'>('home');
+  const [musicOn, setMusicOn] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const toggleMusic = () => {
+    if (musicOn) {
+      audioRef.current?.pause();
+    } else {
+      audioRef.current?.play();
+    }
+    setMusicOn(!musicOn);
+  };
 
   return (
     <div className="min-h-screen relative font-sans">
@@ -25,7 +36,8 @@ function App() {
         <div className="absolute inset-0 bg-grain opacity-[0.04] pointer-events-none"></div>
       </div>
 
-
+      {/* Audio */}
+      <audio ref={audioRef} loop src="/media/meu_trecho_de_musica.mp3" />
 
       {/* Header & Controls */}
       <header className="fixed top-0 left-0 right-0 z-50 p-6 flex justify-between items-center">
@@ -40,7 +52,14 @@ function App() {
             <button onClick={() => setActiveTab('gallery')} className={`hover:text-gold transition-colors ${activeTab === 'gallery' ? 'text-gold' : ''}`}>Galeria</button>
           </nav>
 
-
+          {/* Music Toggle */}
+          <button
+            onClick={toggleMusic}
+            className="w-10 h-10 rounded-full border border-gold/40 bg-[#0a0608a6] backdrop-blur-md flex items-center justify-center text-gold hover:border-gold hover:bg-gold/10 transition-all"
+            title={musicOn ? 'Pausar música' : 'Tocar música'}
+          >
+            {musicOn ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
+          </button>
         </div>
       </header>
 
