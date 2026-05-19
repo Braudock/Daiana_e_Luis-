@@ -138,6 +138,17 @@ body::after{
   background:url('/media/daiana_luis_foto_001.png') center center / cover no-repeat;
   transform:scale(1.07);
   animation:heroZoom 16s ease-in-out infinite alternate;
+  z-index:1;
+}
+.hero-video-bg{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  transform:scale(1.035);
+  opacity:.78;
+  filter:saturate(.75) brightness(.72) contrast(1.05);
+  z-index:2;
+  pointer-events:none;
 }
 @keyframes heroZoom{
   from{transform:scale(1.07)}
@@ -150,6 +161,7 @@ body::after{
   background:radial-gradient(ellipse at 35% 45%,rgba(184,146,74,.07) 0%,transparent 55%),
              radial-gradient(ellipse at 70% 60%,rgba(110,78,36,.05) 0%,transparent 50%),
              #0d0a06;
+  z-index:0;
 }
 
 .hero-overlay{
@@ -160,10 +172,11 @@ body::after{
     rgba(7,6,4,.52) 50%,
     rgba(7,6,4,.92) 100%
   );
+  z-index:3;
 }
 
 .hero-content{
-  position:relative;z-index:2;
+  position:relative;z-index:4;
   display:flex;flex-direction:column;align-items:center;
   padding:0 2rem;
 }
@@ -222,6 +235,7 @@ body::after{
   position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
   display:flex;flex-direction:column;align-items:center;gap:.5rem;
   opacity:0;animation:fadeIn 1s ease forwards 2.8s;
+  z-index:4;
   color:var(--cream-3);
   font-family:'Cormorant SC',serif;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
 }
@@ -680,6 +694,9 @@ footer::before{
 ════════════════════════════════════ -->
 <section id="inicio">
   <div class="hero-bg" style="background-image:url('/media/daiana_luis_foto_001.png')"></div>
+  <video id="heroVideo" class="hero-video-bg" autoplay muted playsinline preload="metadata" poster="/media/daiana_luis_foto_001.png">
+    <source src="/media/daiana_luis_video_001.mp4" type="video/mp4">
+  </video>
   <div class="hero-bg-fallback"></div><!-- aparece só se a foto não carregar -->
   <div class="hero-overlay"></div>
 
@@ -1080,6 +1097,40 @@ document.querySelectorAll('.mob-link').forEach(a =>
     })
     .then(renderGallery)
     .catch(() => renderGallery(fallbackPhotos));
+})();
+
+/* — Vídeo de fundo no início — */
+(function(){
+  const video = document.getElementById('heroVideo');
+  if (!video) return;
+
+  const videos = [
+    '/media/daiana_luis_video_001.mp4',
+    '/media/daiana_luis_video_003.mp4',
+    '/media/daiana_luis_video_004.mp4',
+    '/media/daiana_luis_video_005.mp4',
+    '/media/daiana_luis_video_006.mp4',
+    '/media/final_video_mp_.mp4'
+  ];
+  let index = 0;
+  let switchTimer;
+
+  function playCurrent(){
+    clearTimeout(switchTimer);
+    video.src = videos[index];
+    video.load();
+    video.play().catch(() => {});
+    switchTimer = window.setTimeout(nextVideo, 24000);
+  }
+
+  function nextVideo(){
+    index = (index + 1) % videos.length;
+    playCurrent();
+  }
+
+  video.addEventListener('ended', nextVideo);
+  video.addEventListener('error', nextVideo);
+  playCurrent();
 })();
 
 /* — Scroll reveal — */
