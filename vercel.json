@@ -2,9 +2,7 @@
   "version": 2,
   "functions": {
     "api/index.ts": {
-      "includeFiles": "contexto_luis_paula.md"
-    },
-    "api/**/*.ts": {
+      "includeFiles": "contexto_luis_paula.md",
       "excludeFiles": "{public/media/**,dist/**,node_modules/ffmpeg-static/**,node_modules/sharp/**,node_modules/typescript/**,node_modules/vite/**}"
     }
   },
