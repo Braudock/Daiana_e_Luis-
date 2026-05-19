@@ -12,7 +12,8 @@ app.use(express.json());
 app.use(cors());
 
 // Servir arquivos estáticos do frontend (React / Vite) compilado
-app.use(express.static(path.resolve('./dist')));
+const distPath = process.cwd() + '/dist';
+app.use(express.static(distPath));
 
 // Inicializa a API do Gemini
 // Requer variável de ambiente GEMINI_API_KEY
@@ -61,7 +62,8 @@ app.post('/api/chat', async (req, res) => {
 
 // Qualquer outra rota serve o index.html do frontend (para Single Page Application routing)
 app.get('*all', (req, res) => {
-  res.sendFile(path.resolve('./dist/index.html'));
+  const indexPath = process.cwd() + '/dist/index.html';
+  res.sendFile(indexPath);
 });
 
 // Apenas inicia o servidor se NÃO estiver rodando no ambiente Serverless da Vercel

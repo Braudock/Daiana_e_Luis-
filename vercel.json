@@ -5,14 +5,7 @@
       "includeFiles": "contexto_luis_paula.md"
     },
     "api/**/*.ts": {
-      "excludeFiles": [
-        "public/media/**",
-        "dist/**",
-        "node_modules/ffmpeg-static/**",
-        "node_modules/sharp/**",
-        "node_modules/typescript/**",
-        "node_modules/vite/**"
-      ]
+      "excludeFiles": "{public/media/**,dist/**,node_modules/ffmpeg-static/**,node_modules/sharp/**,node_modules/typescript/**,node_modules/vite/**}"
     }
   },
   "rewrites": [
