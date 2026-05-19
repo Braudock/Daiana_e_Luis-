@@ -1,5 +1,7 @@
-{
+﻿{
   "version": 2,
+  "buildCommand": "echo skip",
+  "outputDirectory": ".",
   "functions": {
     "api/index.ts": {
       "includeFiles": "contexto_luis_paula.md",
