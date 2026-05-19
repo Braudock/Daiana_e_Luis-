@@ -69,6 +69,34 @@ body::after{
 }
 .nav-links a:hover{color:var(--gold-lt);border-bottom-color:var(--gold-dk)}
 
+.music-btn{
+  position:fixed;
+  right:1.25rem;
+  bottom:1.25rem;
+  z-index:650;
+  width:3.25rem;
+  height:3.25rem;
+  border-radius:50%;
+  border:1px solid rgba(184,146,74,.42);
+  background:rgba(7,6,4,.78);
+  color:var(--gold-lt);
+  font-family:'Playfair Display',serif;
+  font-size:1rem;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  box-shadow:0 12px 30px rgba(0,0,0,.36);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  transition:transform .25s ease,border-color .25s ease,color .25s ease;
+}
+.music-btn:hover{transform:translateY(-2px);border-color:rgba(212,169,106,.75);color:#fff4df}
+.music-btn.playing{background:rgba(184,146,74,.18);border-color:rgba(212,169,106,.85)}
+.music-btn:focus-visible{
+  outline:2px solid var(--gold-lt);
+  outline-offset:4px;
+}
+
 /* hamburguer */
 .ham{
   display:none;flex-direction:column;justify-content:center;
@@ -104,11 +132,10 @@ body::after{
   text-align:center;overflow:hidden;
 }
 
-/* fundo fotográfico
-   ▶ Troque 'foto.jpg' pelo caminho da sua foto */
+/* fundo fotográfico */
 .hero-bg{
   position:absolute;inset:0;
-  background:url('foto.jpg') center center / cover no-repeat;
+  background:url('/media/daiana_luis_foto_001.png') center center / cover no-repeat;
   transform:scale(1.07);
   animation:heroZoom 16s ease-in-out infinite alternate;
 }
@@ -493,6 +520,7 @@ body::after{
 .g-item{
   aspect-ratio:3/4;overflow:hidden;
   background:#151008;cursor:pointer;position:relative;
+  display:block;text-decoration:none;color:inherit;
 }
 .g-item img{
   width:100%;height:100%;object-fit:cover;
@@ -508,6 +536,41 @@ body::after{
   text-align:center;opacity:0;transition:opacity .4s;
 }
 .g-item:hover .cap{opacity:1}
+.g-item:focus-visible{
+  outline:2px solid var(--gold-lt);
+  outline-offset:3px;
+}
+
+/* videos */
+#videos{background:#080604}
+.video-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:1rem;
+  margin-top:2.8rem;
+}
+.v-item{
+  background:#100d09;
+  border:1px solid rgba(184,146,74,.12);
+  overflow:hidden;
+}
+.v-item video{
+  display:block;
+  width:100%;
+  aspect-ratio:9/16;
+  object-fit:cover;
+  background:#050403;
+}
+.v-caption{
+  padding:.9rem 1rem 1rem;
+  font-family:'Cormorant SC',serif;
+  font-weight:300;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  font-size:.62rem;
+  color:var(--gold-dk);
+  text-align:center;
+}
 
 /* placeholder galeria */
 .g-placeholder{
@@ -571,6 +634,7 @@ footer::before{
   .counter-box{padding:1.3rem 1.8rem}
   .mems{grid-template-columns:1fr 1fr}
   .gallery-grid{grid-template-columns:1fr 1fr}
+  .music-btn{width:3rem;height:3rem;right:1rem;bottom:1rem}
   .bq{padding:1.4rem 1.2rem 1.4rem 1.5rem}
 }
 @media(max-width:400px){
@@ -588,6 +652,7 @@ footer::before{
     <li><a href="#inicio">Início</a></li>
     <li><a href="#historia">Nossa História</a></li>
     <li><a href="#carta">A Carta</a></li>
+    <li><a href="#videos">Vídeos</a></li>
     <li><a href="#galeria">Galeria</a></li>
   </ul>
   <button class="ham" id="ham" aria-label="Abrir menu">
@@ -601,20 +666,20 @@ footer::before{
   <a href="#inicio"   class="mob-link">Início</a>
   <a href="#historia" class="mob-link">Nossa História</a>
   <a href="#carta"    class="mob-link">A Carta</a>
+  <a href="#videos"   class="mob-link">Vídeos</a>
   <a href="#galeria"  class="mob-link">Galeria</a>
 </div>
+
+<audio id="bgMusic" src="/media/meu_trecho_de_musica.mp3" preload="none" loop></audio>
+<button class="music-btn" id="musicBtn" type="button" aria-label="Tocar música" title="Tocar música">
+  <span id="musicIcon">▶</span>
+</button>
 
 <!-- ════════════════════════════════════
      INÍCIO — HERO
 ════════════════════════════════════ -->
 <section id="inicio">
-  <!--
-    ▶ FOTO DE FUNDO
-    Coloque seu arquivo de imagem na mesma pasta do index.html
-    e renomeie para "foto.jpg"  — ou troque o nome abaixo.
-    Ex: style="background-image:url('daiana.jpg')"
-  -->
-  <div class="hero-bg" style="background-image:url('foto.jpg')"></div>
+  <div class="hero-bg" style="background-image:url('/media/daiana_luis_foto_001.png')"></div>
   <div class="hero-bg-fallback"></div><!-- aparece só se a foto não carregar -->
   <div class="hero-overlay"></div>
 
@@ -826,6 +891,47 @@ footer::before{
 </section>
 
 <!-- ════════════════════════════════════
+     VÍDEOS
+════════════════════════════════════ -->
+<section id="videos" class="sec">
+  <div class="inner wide">
+    <div class="rev">
+      <p class="sec-tag">Vídeos</p>
+      <p style="font-style:italic;color:var(--cream-2);font-size:clamp(1rem,2vw,1.18rem);line-height:1.82;max-width:620px">
+        Pequenos pedaços de vida. Movimento, voz, presença — coisas que foto nenhuma consegue guardar sozinha.
+      </p>
+    </div>
+
+    <div class="video-grid rev d1">
+      <div class="v-item">
+        <video controls preload="metadata" playsinline poster="/media/daiana_luis_foto_020.png">
+          <source src="/media/LUIS_E_DAI.mp4" type="video/mp4">
+        </video>
+        <p class="v-caption">Luis e Dai</p>
+      </div>
+      <div class="v-item">
+        <video controls preload="metadata" playsinline poster="/media/daiana_luis_foto_041.png">
+          <source src="/media/daiana_luis_video_001.mp4" type="video/mp4">
+        </video>
+        <p class="v-caption">Memória viva</p>
+      </div>
+      <div class="v-item">
+        <video controls preload="metadata" playsinline poster="/media/daiana_luis_foto_075.png">
+          <source src="/media/daiana_luis_video_003.mp4" type="video/mp4">
+        </video>
+        <p class="v-caption">Nós</p>
+      </div>
+      <div class="v-item">
+        <video controls preload="metadata" playsinline poster="/media/daiana_luis_foto_120.png">
+          <source src="/media/final_video_mp_.mp4" type="video/mp4">
+        </video>
+        <p class="v-caption">Final</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
      GALERIA
 ════════════════════════════════════ -->
 <section id="galeria" class="sec">
@@ -839,43 +945,10 @@ footer::before{
       </p>
     </div>
 
-    <!--
-      ▶ COMO ADICIONAR FOTOS:
-      Copie os arquivos .jpg/.png pra mesma pasta do index.html.
-      Para cada foto, adicione um bloco:
-
-      <div class="g-item">
-        <img src="nomeDaFoto.jpg" alt="Legenda" loading="lazy">
-        <span class="cap">Legenda opcional</span>
-      </div>
-
-      Descomente os exemplos abaixo e troque os nomes.
-    -->
-    <div class="gallery-grid rev d1">
-
-      <!--
-      <div class="g-item">
-        <img src="foto1.jpg" alt="Nós dois" loading="lazy">
-        <span class="cap">2016</span>
-      </div>
-      <div class="g-item">
-        <img src="foto2.jpg" alt="Nossa aventura" loading="lazy">
-        <span class="cap">Nossa viagem</span>
-      </div>
-      <div class="g-item">
-        <img src="foto3.jpg" alt="Momento especial" loading="lazy">
-        <span class="cap">Momentos</span>
-      </div>
-      -->
-
+    <div class="gallery-grid rev d1" id="galleryGrid" aria-live="polite">
       <div class="g-placeholder">
-        <p>
-          Adicione suas fotos aqui.<br>
-          Coloque os arquivos na mesma pasta e use<br>
-          <code>&lt;img src="nomeDaFoto.jpg"&gt;</code>
-        </p>
+        <p>Carregando nossas fotos...</p>
       </div>
-
     </div>
   </div>
 </section>
@@ -917,6 +990,96 @@ document.querySelectorAll('.mob-link').forEach(a =>
   const days = Math.floor((Date.now() - start) / 86400000);
   const el = document.getElementById('dias');
   if (el) el.textContent = days.toLocaleString('pt-BR');
+})();
+
+/* — Música — */
+(function(){
+  const audio = document.getElementById('bgMusic');
+  const btn = document.getElementById('musicBtn');
+  const icon = document.getElementById('musicIcon');
+  if (!audio || !btn || !icon) return;
+
+  audio.volume = 0.62;
+
+  function syncMusicState(){
+    const playing = !audio.paused;
+    btn.classList.toggle('playing', playing);
+    btn.setAttribute('aria-label', playing ? 'Pausar música' : 'Tocar música');
+    btn.setAttribute('title', playing ? 'Pausar música' : 'Tocar música');
+    icon.textContent = playing ? 'Ⅱ' : '▶';
+  }
+
+  btn.addEventListener('click', async () => {
+    try {
+      if (audio.paused) await audio.play();
+      else audio.pause();
+    } catch (err) {
+      console.warn('Não foi possível tocar a música agora.', err);
+    }
+    syncMusicState();
+  });
+
+  audio.addEventListener('play', syncMusicState);
+  audio.addEventListener('pause', syncMusicState);
+})();
+
+/* — Galeria dinâmica — */
+(function(){
+  const grid = document.getElementById('galleryGrid');
+  if (!grid) return;
+
+  const fallbackPhotos = [
+    'daiana_luis_foto_001.png',
+    'daiana_luis_foto_002.png',
+    'daiana_luis_foto_003.png',
+    'daiana_luis_foto_004.png',
+    'daiana_luis_foto_005.png',
+    'daiana_luis_foto_020.png',
+    'daiana_luis_foto_041.png',
+    'daiana_luis_foto_075.png',
+    'daiana_luis_foto_120.png',
+    'daiana_luis_foto_180.png',
+    'daiana_luis_foto_240.png',
+    'daiana_luis_foto_300.png'
+  ];
+
+  const mediaUrl = name => `/media/${name.split('/').map(encodeURIComponent).join('/')}`;
+
+  function renderGallery(files){
+    const photos = files.filter(name => /\.(png|jpe?g|webp)$/i.test(name));
+    grid.innerHTML = '';
+
+    photos.forEach((name, index) => {
+      const href = mediaUrl(name);
+      const item = document.createElement('a');
+      item.className = 'g-item';
+      item.href = href;
+      item.target = '_blank';
+      item.rel = 'noopener';
+      item.setAttribute('aria-label', `Abrir memória ${index + 1}`);
+
+      const img = document.createElement('img');
+      img.src = href;
+      img.alt = `Memória de Daiana e Luis ${index + 1}`;
+      img.loading = index < 8 ? 'eager' : 'lazy';
+      img.decoding = 'async';
+
+      const cap = document.createElement('span');
+      cap.className = 'cap';
+      cap.textContent = `Memória ${index + 1}`;
+
+      item.append(img, cap);
+      grid.appendChild(item);
+    });
+  }
+
+  fetch('/media/photoList.json')
+    .then(resp => {
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      return resp.json();
+    })
+    .then(renderGallery)
+    .catch(() => renderGallery(fallbackPhotos));
 })();
 
 /* — Scroll reveal — */

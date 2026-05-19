@@ -2,3 +2,7 @@ node_modules
 dist
 .env
 VIDEOS
+AVATAR
+FOTOS MELHORADAS
+MUSICA
+*.log
