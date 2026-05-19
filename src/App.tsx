@@ -55,6 +55,14 @@ function App() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const openingRef = useRef<HTMLElement>(null);
   const [musicOn, setMusicOn] = useState(false);
+  const [days, setDays] = useState(0);
+
+  useEffect(() => {
+    // Calculado desde 01/01/2016 — ajuste o dia/mês quando souber a data exata
+    const start = new Date('2016-01-01T00:00:00');
+    const diff = Date.now() - start.getTime();
+    setDays(Math.floor(diff / 86400000));
+  }, []);
 
   const galleryPhotos = useMemo(
     () => photoList.slice(0, 56).map((name) => mediaPath(name)),
@@ -133,7 +141,7 @@ function App() {
           <source src={mediaPath('LUIS_E_DAI.mp4')} type="video/mp4" />
         </video>
         <div className="opening-shade" />
-        <p className="o-label">Uma carta de quem errou - Para Daiana Lourenço</p>
+        <p className="o-label">Uma carta de amor — Daiana &amp; Luís, desde 2016</p>
         <h1 className="o-title">
           Desde 2016,
           <br />
@@ -142,10 +150,35 @@ function App() {
           do meu <span>mundo.</span>
         </h1>
         <p className="o-sub">
-          Eu não mereço a carta que você me escreveu.
-          <br />
+          Eu não mereço a carta que você me escreveu.<br />
           Mas você merece a resposta mais honesta que eu já escrevi.
         </p>
+        <div style={{
+          marginTop: '2.5rem',
+          position: 'relative',
+          zIndex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '0.4rem',
+          opacity: 0,
+          animation: 'riseIn 1.4s ease forwards 1.9s'
+        }}>
+          <span style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: 'clamp(3rem, 8vw, 5.5rem)',
+            color: 'var(--gold-glow)',
+            lineHeight: 1,
+            fontStyle: 'italic'
+          }}>{days.toLocaleString('pt-BR')}</span>
+          <span style={{
+            fontFamily: "'Cormorant SC', serif",
+            fontSize: 'clamp(0.65rem, 1.2vw, 0.8rem)',
+            letterSpacing: '0.3em',
+            color: 'var(--gold-dim)',
+            textTransform: 'uppercase'
+          }}>Dias de Nós</span>
+        </div>
       </section>
 
       <main className="letter-wrap">
