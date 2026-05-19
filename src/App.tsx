@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, Heart, Sparkles, Image as ImageIcon, Send } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Play, Pause, Heart, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import ReactMarkdown from 'react-markdown';
 import photoList from './photoList.json';
 
 // Componente Principal
