@@ -422,15 +422,15 @@ export default function App() {
           <source src="/media/daiana_luis_video_001.mp4" type="video/mp4" />
         </video>
         <div id="opening-overlay" />
-        <p className="o-label">Uma carta de amor — Para Daiana Lourenço</p>
+        <p className="o-label">Uma carta de amor — Daiana & Luís, desde 2016</p>
         <h1 className="o-title">
           Você foi<br />
           a melhor coisa<br />
           que me <span className="gold">aconteceu.</span>
         </h1>
         <p className="o-sub">
-          E eu precisava que você soubesse disso.<br />
-          Com cada foto, com cada memória, com toda a verdade.
+          Quase 10 anos de história.<br />
+          E eu queria que o mundo soubesse o quanto você vale.
         </p>
       </section>
 
@@ -600,8 +600,8 @@ export default function App() {
       {/* ═══ RODAPÉ ═══ */}
       <footer>
         <p>
-          02 de Maio de 2026 · Velho Pietro<br />
-          <em>— O dia em que tudo começou.</em>
+          Desde 2016, juntos.<br />
+          <em>— Quase uma década de amor real.</em>
         </p>
         <span className="daiana-final">Daiana.</span>
       </footer>
