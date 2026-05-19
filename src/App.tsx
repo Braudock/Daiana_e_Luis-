@@ -1,22 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
-import { Play, Pause, Heart, Image as ImageIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Heart, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import photoList from './photoList.json';
 
 // Componente Principal
 function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'gallery'>('home');
-  const [musicOn, setMusicOn] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
-
-  const toggleMusic = () => {
-    if (musicOn) {
-      audioRef.current?.pause();
-    } else {
-      audioRef.current?.play();
-    }
-    setMusicOn(!musicOn);
-  };
 
   return (
     <div className="min-h-screen relative font-sans">
@@ -36,8 +25,7 @@ function App() {
         <div className="absolute inset-0 bg-grain opacity-[0.04] pointer-events-none"></div>
       </div>
 
-      {/* Audio */}
-      <audio ref={audioRef} loop src="/media/meu_trecho_de_musica.mp3" />
+
 
       {/* Header & Controls */}
       <header className="fixed top-0 left-0 right-0 z-50 p-6 flex justify-between items-center">
@@ -52,18 +40,7 @@ function App() {
             <button onClick={() => setActiveTab('gallery')} className={`hover:text-gold transition-colors ${activeTab === 'gallery' ? 'text-gold' : ''}`}>Galeria</button>
           </nav>
 
-          {/* Music Toggle */}
-          <div className="flex items-center gap-3">
-            <span className="font-serif text-[0.75rem] text-gold-light opacity-60 tracking-[3px] uppercase hidden sm:inline-block">
-              Nossa Vibe
-            </span>
-            <button 
-              onClick={toggleMusic}
-              className="w-12 h-12 rounded-full border border-gold/40 bg-[#0a0608a6] backdrop-blur-md flex items-center justify-center text-gold hover:border-gold hover:bg-gold/10 transition-all"
-            >
-              {musicOn ? <Pause size={18} /> : <Play size={18} className="ml-1" />}
-            </button>
-          </div>
+
         </div>
       </header>
 

@@ -1,4 +1,8 @@
 node_modules
 dist
 .env
+.vercel
 VIDEOS
+AVATAR
+FOTOS MELHORADAS
+MUSICA
