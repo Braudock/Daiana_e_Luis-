@@ -1,14 +1,939 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Para Daiana — Luís Ricardo</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+SC:wght@300;400&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daiana & Luis — Arquivo Afetivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;1,400;1,700&family=EB+Garamond:ital,wght@0,400;1,400&family=Cormorant+SC:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════
+   RESET & TOKENS
+════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --bg:      #070604;
+  --bg2:     #0b0906;
+  --gold:    #b8924a;
+  --gold-lt: #d4a96a;
+  --gold-dk: #6a4e24;
+  --cream:   #ede8df;
+  --cream-2: #a89f92;
+  --cream-3: #5c5650;
+}
+
+body{
+  background:var(--bg);
+  color:var(--cream);
+  font-family:'EB Garamond',Georgia,serif;
+  overflow-x:hidden;
+}
+
+/* grain sempre presente */
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.024'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1000;
+}
+
+/* ════════════════════════════════
+   NAVEGAÇÃO
+════════════════════════════════ */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:600;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.8rem 3.5rem;
+  transition:background .5s,padding .4s,border-color .5s;
+  border-bottom:1px solid transparent;
+}
+#nav.scrolled{
+  background:rgba(7,6,4,.88);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  padding:1rem 3.5rem;
+  border-bottom-color:rgba(184,146,74,.1);
+}
+.nav-logo{
+  font-family:'Great Vibes',cursive;
+  font-size:2rem;color:var(--gold-lt);
+  text-decoration:none;
+}
+.nav-links{display:flex;gap:2.8rem;list-style:none}
+.nav-links a{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--cream-2);text-decoration:none;
+  border-bottom:1px solid transparent;padding-bottom:2px;
+  transition:color .3s,border-color .3s;
+}
+.nav-links a:hover{color:var(--gold-lt);border-bottom-color:var(--gold-dk)}
+
+/* hamburguer */
+.ham{
+  display:none;flex-direction:column;justify-content:center;
+  gap:5px;background:none;border:none;cursor:pointer;padding:4px;
+}
+.ham span{display:block;width:22px;height:1px;background:var(--cream-2);transition:.3s}
+
+/* mobile menu */
+#mobMenu{
+  display:none;position:fixed;inset:0;
+  background:rgba(7,6,4,.97);z-index:590;
+  flex-direction:column;align-items:center;justify-content:center;gap:3rem;
+}
+#mobMenu.open{display:flex}
+#mobMenu a{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.35em;font-size:1rem;text-transform:uppercase;
+  color:var(--cream-2);text-decoration:none;
+}
+.mob-x{
+  position:absolute;top:1.5rem;right:2rem;
+  font-size:1.3rem;color:var(--cream-3);
+  background:none;border:none;cursor:pointer;
+}
+
+/* ════════════════════════════════
+   HERO — SEÇÃO INÍCIO
+════════════════════════════════ */
+#inicio{
+  position:relative;min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;overflow:hidden;
+}
+
+/* fundo fotográfico
+   ▶ Troque 'foto.jpg' pelo caminho da sua foto */
+.hero-bg{
+  position:absolute;inset:0;
+  background:url('foto.jpg') center center / cover no-repeat;
+  transform:scale(1.07);
+  animation:heroZoom 16s ease-in-out infinite alternate;
+}
+@keyframes heroZoom{
+  from{transform:scale(1.07)}
+  to  {transform:scale(1.01)}
+}
+
+/* fallback quando não há foto */
+.hero-bg-fallback{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 35% 45%,rgba(184,146,74,.07) 0%,transparent 55%),
+             radial-gradient(ellipse at 70% 60%,rgba(110,78,36,.05) 0%,transparent 50%),
+             #0d0a06;
+}
+
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    180deg,
+    rgba(7,6,4,.35) 0%,
+    rgba(7,6,4,.52) 50%,
+    rgba(7,6,4,.92) 100%
+  );
+}
+
+.hero-content{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 2rem;
+}
+
+/* "02 DE MAIO · 2026" */
+.hero-meta{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.38em;font-size:clamp(.6rem,1.2vw,.75rem);
+  color:rgba(212,169,106,.65);text-transform:uppercase;
+  margin-bottom:1.4rem;
+  opacity:0;animation:fadeUp 1.2s ease forwards .3s;
+}
+
+/* "Daiana & Luis" script grande */
+.hero-title{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(4.5rem,14vw,12rem);
+  color:#faf7f2;line-height:1;
+  text-shadow:0 2px 80px rgba(0,0,0,.55);
+  opacity:0;animation:fadeUp 1.5s ease forwards .7s;
+  letter-spacing:.02em;
+}
+
+/* "Arquivo Afetivo" */
+.hero-sub{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.28em;font-size:clamp(.62rem,1.2vw,.78rem);
+  color:var(--gold-lt);text-transform:uppercase;
+  margin-top:1rem;
+  opacity:0;animation:fadeUp 1.2s ease forwards 1.1s;
+}
+
+/* caixa contador */
+.counter-box{
+  margin-top:3.5rem;
+  border:1px solid rgba(184,146,74,.18);
+  background:rgba(7,6,4,.52);
+  backdrop-filter:blur(10px);
+  padding:1.6rem 3.2rem;
+  display:flex;flex-direction:column;align-items:center;gap:.45rem;
+  opacity:0;animation:fadeUp 1.2s ease forwards 1.6s;
+}
+.counter-num{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(3rem,8vw,5.5rem);line-height:1;
+  color:var(--gold-lt);letter-spacing:-.03em;
+}
+.counter-label{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.38em;font-size:clamp(.55rem,.95vw,.7rem);
+  color:var(--cream-3);text-transform:uppercase;
+}
+
+/* seta scroll */
+.scroll-arrow{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  opacity:0;animation:fadeIn 1s ease forwards 2.8s;
+  color:var(--cream-3);
+  font-family:'Cormorant SC',serif;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
+}
+.scroll-line{
+  width:1px;height:48px;
+  background:linear-gradient(to bottom,var(--gold-dk),transparent);
+  animation:linePulse 2.2s ease-in-out infinite;
+}
+@keyframes linePulse{
+  0%  {transform:scaleY(0);transform-origin:top;opacity:0}
+  55% {transform:scaleY(1);transform-origin:top;opacity:1}
+  100%{transform:scaleY(1);transform-origin:bottom;opacity:0}
+}
+
+/* ════════════════════════════════
+   REVEAL UNIVERSAL
+════════════════════════════════ */
+.rev{
+  opacity:0;transform:translateY(28px);
+  transition:opacity .88s ease,transform .88s ease;
+}
+.rev.show{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.08s}
+.d2{transition-delay:.18s}
+.d3{transition-delay:.28s}
+.d4{transition-delay:.38s}
+.d5{transition-delay:.48s}
+
+/* ════════════════════════════════
+   SECTION SHELL
+════════════════════════════════ */
+.sec{padding:clamp(5rem,10vw,8rem) clamp(1.5rem,5vw,4rem)}
+.inner{max-width:800px;margin:0 auto}
+.inner.wide{max-width:1060px}
+
+/* rótulo de seção */
+.sec-tag{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.38em;font-size:clamp(.58rem,1vw,.72rem);
+  color:var(--gold-dk);text-transform:uppercase;
+  display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;
+}
+.sec-tag::after{
+  content:'';flex:1;max-width:72px;height:1px;
+  background:linear-gradient(to right,var(--gold-dk),transparent);
+}
+
+/* separador horizontal */
+.sep{
+  width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(184,146,74,.1),transparent);
+  margin:2rem 0;
+}
+
+/* ════════════════════════════════
+   SEÇÃO — NOSSA HISTÓRIA
+════════════════════════════════ */
+#historia{background:var(--bg2)}
+
+.historia-lead{
+  font-size:clamp(1.18rem,2.4vw,1.5rem);
+  font-style:italic;line-height:1.87;color:var(--cream-2);
+  margin-bottom:3.5rem;
+}
+.historia-lead strong{color:var(--cream);font-weight:500}
+.historia-lead em{color:var(--gold-lt)}
+
+/* timeline horizontal */
+.tl-bar-wrap{margin:2rem 0 3rem}
+.tl-bar{display:flex;align-items:center;position:relative;margin-bottom:.9rem}
+.tl-bar::before{
+  content:'';position:absolute;top:50%;left:0;right:0;
+  height:1px;transform:translateY(-50%);
+  background:linear-gradient(90deg,var(--gold-dk),rgba(184,146,74,.12));
+}
+.tl-dot{
+  width:7px;height:7px;border-radius:50%;
+  border:1px solid var(--gold-dk);background:var(--bg);
+  flex-shrink:0;position:relative;z-index:1;
+}
+.tl-dot.now{
+  border-color:var(--gold-lt);
+  box-shadow:0 0 10px rgba(212,169,106,.45);
+}
+.tl-sp{flex:1}
+.tl-labels{
+  display:flex;justify-content:space-between;
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.22em;font-size:.68rem;color:var(--gold-dk);text-transform:uppercase;
+}
+
+/* timeline vertical */
+.tl-vert{position:relative;padding-left:1.8rem;margin:3rem 0}
+.tl-vert::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:1px;
+  background:linear-gradient(to bottom,transparent,var(--gold-dk) 8%,var(--gold-dk) 92%,transparent);
+}
+.tl-item{position:relative;padding:0 0 2.8rem 2.2rem}
+.tl-item::before{
+  content:'';position:absolute;left:-4px;top:7px;
+  width:9px;height:9px;border-radius:50%;
+  border:1px solid var(--gold-dk);background:var(--bg2);
+}
+.tl-item.hot::before{
+  border-color:var(--gold-lt);
+  box-shadow:0 0 9px rgba(212,169,106,.4);
+}
+.tl-year{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.22em;font-size:.7rem;color:var(--gold-dk);
+  text-transform:uppercase;margin-bottom:.45rem;
+}
+.tl-text{font-size:clamp(.98rem,1.8vw,1.14rem);line-height:1.8;color:var(--cream-2)}
+.tl-text strong{color:var(--cream);font-weight:500}
+.tl-text em{color:var(--gold-lt);font-style:italic}
+
+/* 9 gigante */
+.big9{
+  text-align:center;padding:3.5rem 0;
+}
+.big9 .n{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(6rem,18vw,13rem);line-height:.9;
+  color:transparent;-webkit-text-stroke:1px rgba(184,146,74,.2);
+  letter-spacing:-.04em;display:block;
+}
+.big9 .nl{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.42em;font-size:clamp(.6rem,1.1vw,.75rem);
+  color:var(--gold-dk);text-transform:uppercase;
+  display:block;margin-top:.6rem;
+}
+
+/* grid memórias */
+.mems{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(188px,1fr));
+  gap:1px;margin:2.5rem 0;
+  border:1px solid rgba(184,146,74,.08);overflow:hidden;
+}
+.mem{
+  padding:1.4rem;background:rgba(184,146,74,.02);
+  border-right:1px solid rgba(184,146,74,.05);
+  border-bottom:1px solid rgba(184,146,74,.05);
+  transition:background .3s;
+}
+.mem:hover{background:rgba(184,146,74,.055)}
+.mem .ico{font-size:1.3rem;margin-bottom:.55rem;display:block;filter:saturate(.5)brightness(.85)}
+.mem p{font-size:clamp(.9rem,1.6vw,1.02rem);line-height:1.6;color:var(--cream-2);margin:0}
+
+/* ════════════════════════════════
+   SEÇÃO — A CARTA
+════════════════════════════════ */
+#carta{background:var(--bg)}
+
+.carta-head{text-align:center;margin-bottom:4.5rem}
+.carta-head h2{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(3rem,8vw,6.5rem);
+  color:var(--gold-lt);line-height:1.1;
+}
+.carta-head .sub{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.28em;font-size:clamp(.6rem,1.1vw,.76rem);
+  color:var(--cream-3);text-transform:uppercase;
+  margin-top:.8rem;
+}
+
+/* bloco carta */
+.blk{margin-bottom:4.5rem}
+.ch{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.3em;font-size:clamp(.58rem,1vw,.73rem);
+  color:var(--gold-dk);text-transform:uppercase;
+  display:flex;align-items:center;gap:1rem;margin-bottom:1rem;
+}
+.ch::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--gold-dk),transparent)}
+
+.blk p{
+  font-size:clamp(1.1rem,2.2vw,1.34rem);
+  line-height:1.96;font-weight:400;color:var(--cream-2);
+  margin-bottom:1.4rem;
+}
+.blk p:last-child{margin-bottom:0}
+.blk p strong{color:var(--cream);font-weight:500}
+.blk p em{color:var(--gold-lt);font-style:italic}
+
+/* confissão */
+.conf{
+  border:1px solid rgba(140,48,48,.28);
+  padding:clamp(2rem,5vw,3.2rem);
+  margin:3rem 0;background:rgba(140,48,48,.032);
+  position:relative;
+}
+.conf::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(140,48,48,.4),transparent);
+}
+.conf .headline{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(1.4rem,3vw,2.1rem);line-height:1.25;
+  color:var(--cream);margin-bottom:1.4rem;
+}
+.conf p{font-size:clamp(1.06rem,1.9vw,1.22rem);line-height:1.9;color:var(--cream-2);margin-bottom:1rem}
+.conf p:last-child{margin-bottom:0}
+.conf p strong{color:var(--cream);font-weight:500}
+
+/* quote */
+.bq{
+  border-left:2px solid var(--gold-dk);
+  padding:1.8rem 2rem 1.8rem 2.2rem;
+  margin:2.8rem 0;background:rgba(184,146,74,.025);
+}
+.bq p{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(1.18rem,2.4vw,1.55rem) !important;
+  line-height:1.65 !important;color:var(--cream) !important;
+  margin-bottom:.65rem !important;
+}
+.bq cite{font-size:.73rem;letter-spacing:.18em;color:var(--gold-dk);text-transform:uppercase;font-style:normal}
+
+/* statement central */
+.stmt{text-align:center;padding:5rem 1rem;position:relative}
+.stmt::before,.stmt::after{
+  content:'';display:block;width:1px;height:52px;
+  background:linear-gradient(to bottom,transparent,var(--gold-dk),transparent);
+  margin:0 auto 3.5rem;
+}
+.stmt::after{margin:3.5rem auto 0}
+.stmt h2{
+  font-family:'Playfair Display',serif;font-style:italic;font-weight:400;
+  font-size:clamp(1.9rem,4.5vw,3.7rem);line-height:1.22;color:var(--cream);
+}
+.stmt h2 span{color:var(--gold-lt)}
+
+/* caixa carta final */
+.letter-box{
+  border:1px solid rgba(184,146,74,.1);
+  padding:clamp(2rem,5vw,4rem);
+  margin-top:3rem;
+  background:rgba(184,146,74,.02);
+  position:relative;
+}
+.letter-box::before{
+  content:'\275D';
+  position:absolute;top:-.75rem;left:2rem;
+  font-size:3.5rem;color:var(--gold-dk);opacity:.3;line-height:1;
+}
+.letter-sal{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(2rem,5vw,3.5rem);
+  color:var(--gold-lt);display:block;margin-bottom:1.8rem;
+}
+
+/* promessas */
+.pr{
+  display:flex;align-items:flex-start;gap:1rem;
+  border-left:2px solid var(--gold);
+  padding:1.1rem 1.4rem;margin:.9rem 0;
+  background:rgba(184,146,74,.025);
+}
+.pr .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);flex-shrink:0;margin-top:.58rem;
+}
+.pr p{
+  font-size:clamp(1.05rem,2vw,1.18rem) !important;
+  line-height:1.75 !important;color:var(--cream) !important;
+  margin:0 !important;
+}
+
+/* assinatura */
+.assin{margin-top:3.5rem;text-align:right;padding-right:.5rem}
+.assin .de{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  font-size:.7rem;letter-spacing:.25em;
+  color:var(--gold-dk);text-transform:uppercase;
+  display:block;margin-bottom:.4rem;
+}
+.assin .nome{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(2rem,4.5vw,3.2rem);color:var(--gold-lt);
+}
+
+/* ════════════════════════════════
+   SEÇÃO — GALERIA
+════════════════════════════════ */
+#galeria{background:var(--bg2)}
+
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:3px;margin-top:2.8rem;
+}
+.g-item{
+  aspect-ratio:3/4;overflow:hidden;
+  background:#151008;cursor:pointer;position:relative;
+}
+.g-item img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .7s ease,filter .4s;
+  filter:saturate(.65) brightness(.82);
+}
+.g-item:hover img{transform:scale(1.07);filter:saturate(.9) brightness(.95)}
+.g-item .cap{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:1.2rem 1rem .9rem;
+  background:linear-gradient(to top,rgba(7,6,4,.85),transparent);
+  font-style:italic;font-size:.9rem;color:var(--cream-2);
+  text-align:center;opacity:0;transition:opacity .4s;
+}
+.g-item:hover .cap{opacity:1}
+
+/* placeholder galeria */
+.g-placeholder{
+  grid-column:1/-1;
+  text-align:center;
+  padding:5rem 2rem;
+  border:1px dashed rgba(184,146,74,.1);
+}
+.g-placeholder p{font-style:italic;color:var(--cream-3);font-size:1rem;line-height:1.9}
+.g-placeholder code{
+  font-family:monospace;font-size:.85rem;
+  color:var(--gold-dk);background:rgba(184,146,74,.07);
+  padding:.15rem .4rem;
+}
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+footer{
+  text-align:center;
+  padding:5rem 2rem 6.5rem;
+  border-top:1px solid rgba(184,146,74,.07);
+}
+footer::before{
+  content:'';display:block;width:1px;height:70px;
+  background:linear-gradient(to bottom,rgba(184,146,74,.2),transparent);
+  margin:0 auto 3rem;
+}
+.ft-name{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(3rem,9vw,7.5rem);
+  color:var(--gold-lt);opacity:.2;display:block;line-height:1;
+  margin-bottom:2rem;
+}
+.ft-quote{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(1rem,2vw,1.25rem);
+  color:var(--cream-3);line-height:1.85;
+  max-width:540px;margin:0 auto .8rem;
+}
+.ft-credit{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  letter-spacing:.2em;font-size:.65rem;
+  color:var(--gold-dk);text-transform:uppercase;
+}
+
+/* ════════════════════════════════
+   KEYFRAMES
+════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn {from{opacity:0}to{opacity:1}}
+
+/* ════════════════════════════════
+   RESPONSIVO
+════════════════════════════════ */
+@media(max-width:700px){
+  #nav{padding:1.2rem 1.6rem}
+  #nav.scrolled{padding:.9rem 1.6rem}
+  .nav-links{display:none}
+  .ham{display:flex}
+  .counter-box{padding:1.3rem 1.8rem}
+  .mems{grid-template-columns:1fr 1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr}
+  .bq{padding:1.4rem 1.2rem 1.4rem 1.5rem}
+}
+@media(max-width:400px){
+  .mems{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ NAV ════════ -->
+<nav id="nav">
+  <a href="#inicio" class="nav-logo">D & L</a>
+  <ul class="nav-links">
+    <li><a href="#inicio">Início</a></li>
+    <li><a href="#historia">Nossa História</a></li>
+    <li><a href="#carta">A Carta</a></li>
+    <li><a href="#galeria">Galeria</a></li>
+  </ul>
+  <button class="ham" id="ham" aria-label="Abrir menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- mobile -->
+<div id="mobMenu">
+  <button class="mob-x" id="mobX">✕</button>
+  <a href="#inicio"   class="mob-link">Início</a>
+  <a href="#historia" class="mob-link">Nossa História</a>
+  <a href="#carta"    class="mob-link">A Carta</a>
+  <a href="#galeria"  class="mob-link">Galeria</a>
+</div>
+
+<!-- ════════════════════════════════════
+     INÍCIO — HERO
+════════════════════════════════════ -->
+<section id="inicio">
+  <!--
+    ▶ FOTO DE FUNDO
+    Coloque seu arquivo de imagem na mesma pasta do index.html
+    e renomeie para "foto.jpg"  — ou troque o nome abaixo.
+    Ex: style="background-image:url('daiana.jpg')"
+  -->
+  <div class="hero-bg" style="background-image:url('foto.jpg')"></div>
+  <div class="hero-bg-fallback"></div><!-- aparece só se a foto não carregar -->
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <p class="hero-meta">Desde 2016 &middot; Nove anos &middot; Para sempre</p>
+    <h1 class="hero-title">Daiana &amp; Luis</h1>
+    <p class="hero-sub">Arquivo Afetivo da Nossa História</p>
+
+    <div class="counter-box">
+      <span class="counter-num" id="dias">—</span>
+      <span class="counter-label">dias juntos desde 2016</span>
+    </div>
+  </div>
+
+  <div class="scroll-arrow">
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     NOSSA HISTÓRIA
+════════════════════════════════════ -->
+<section id="historia" class="sec">
+  <div class="inner">
+
+    <div class="rev">
+      <p class="sec-tag">Nossa história</p>
+      <p class="historia-lead">
+        Você escreveu: <em>"Não é louco que quase metade da sua vida nos conhecemos
+        e dividimos tantos anos juntos."</em>
+        <br><br>
+        Tem razão. <strong>Nove anos não são um capítulo — são um livro inteiro.</strong>
+        Com depressão descoberta juntos, neurodivergência aprendida juntos, ansiedade
+        enfrentada juntos. Com café na cama, rolês de moto sem destino, filmes discutidos até tarde
+        e o copo da felicidade partilhado em qualquer hora.
+        Com a sua cabeça no meu peito e o seu jeito de cuidar de mim que eu não soube valorizar
+        como merecia.
+      </p>
+    </div>
+
+    <!-- timeline horizontal -->
+    <div class="tl-bar-wrap rev d1">
+      <div class="tl-bar">
+        <div class="tl-dot"></div><div class="tl-sp"></div>
+        <div class="tl-dot"></div><div class="tl-sp"></div>
+        <div class="tl-dot"></div><div class="tl-sp"></div>
+        <div class="tl-dot"></div><div class="tl-sp"></div>
+        <div class="tl-dot"></div><div class="tl-sp"></div>
+        <div class="tl-dot"></div><div class="tl-sp"></div>
+        <div class="tl-dot"></div><div class="tl-sp"></div>
+        <div class="tl-dot"></div><div class="tl-sp"></div>
+        <div class="tl-dot now"></div>
+      </div>
+      <div class="tl-labels"><span>2016</span><span>2026</span></div>
+    </div>
+
+    <!-- timeline vertical -->
+    <div class="tl-vert rev d2">
+      <div class="tl-item hot">
+        <p class="tl-year">2016 — o começo</p>
+        <p class="tl-text">A gente se encontrou. Eu ainda não sabia o quanto isso ia mudar tudo dentro de mim.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-year">2017 – 2018</p>
+        <p class="tl-text">Descobrindo que viver junto é diferente de se gostar. Aprendendo juntos o que a gente era.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-year">2019 – 2020</p>
+        <p class="tl-text"><strong>A neurodivergência ganhou nome. A ansiedade também.</strong> Você ficou ao meu lado enquanto eu aprendia minha própria cabeça.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-year">2021 – 2022</p>
+        <p class="tl-text">Quando você só queria desistir e eu <em>finalmente</em> entendi o que era depressão de verdade. Você me ensinou que a vida presta.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-year">2023 – 2024</p>
+        <p class="tl-text">Sonhos feitos juntos. Planos que eu não soube escutar direito. A parceria que eu deveria ter honrado com muito mais cuidado.</p>
+      </div>
+      <div class="tl-item hot">
+        <p class="tl-year">2025 – 2026</p>
+        <p class="tl-text"><strong>O erro que quebrou o que a gente tinha.</strong> E a mensagem de aniversário mais honesta e generosa que alguém já me escreveu na vida.</p>
+      </div>
+    </div>
+
+    <!-- 9 grande -->
+    <div class="big9 rev d3">
+      <span class="n">9</span>
+      <span class="nl">anos de vida compartilhada</span>
+    </div>
+
+    <!-- memórias -->
+    <p class="rev d3" style="font-style:italic;color:var(--cream-2);font-size:clamp(1rem,2vw,1.2rem);line-height:1.85;margin-bottom:1.8rem">
+      Você listou o que vai sentir falta. Eu li cada linha e reconheci cada uma.<br>
+      Mas a lista é maior do que você imagina.
+    </p>
+
+    <div class="mems rev d4">
+      <div class="mem"><span class="ico">☕</span><p>O café na cama que a gente não toma mais juntos</p></div>
+      <div class="mem"><span class="ico">🏍️</span><p>Topa todos os rolês de moto — sem hesitar, só o vento e a gente</p></div>
+      <div class="mem"><span class="ico">🎬</span><p>Conversa sobre o filme depois que termina — como se a sessão nunca acabasse</p></div>
+      <div class="mem"><span class="ico">🍽️</span><p>Come igual a mim — na mesma sintonia, sem frescura, sem julgamento</p></div>
+      <div class="mem"><span class="ico">🥤</span><p>O copo da felicidade e todas as guloseimas que a gente sempre partilhou</p></div>
+      <div class="mem"><span class="ico">🫀</span><p>Quando ela deita no meu peito — o silêncio mais bonito que eu já conheci</p></div>
+      <div class="mem"><span class="ico">✨</span><p>Linda e super inteligente — do jeito que pouca gente consegue ser ao mesmo tempo</p></div>
+      <div class="mem"><span class="ico">👑</span><p>Empoderada, segura, inteira — sabe quem é e não pede licença pra isso</p></div>
+      <div class="mem"><span class="ico">🤍</span><p>Sempre cuidou de mim — às vezes muito mais do que eu merecia</p></div>
+      <div class="mem"><span class="ico">📺</span><p>A nossa série — infinitamente, sem cansar</p></div>
+      <div class="mem"><span class="ico">🚿</span><p>Pedir pra esfregar as costas — a intimidade mais simples do mundo</p></div>
+      <div class="mem"><span class="ico">🧠</span><p>Descobrir juntos que a gente não estava louco — só diferente</p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     A CARTA
+════════════════════════════════════ -->
+<section id="carta" class="sec">
+  <div class="inner">
+
+    <!-- cabeçalho -->
+    <div class="carta-head rev">
+      <p class="sec-tag" style="justify-content:center">A carta</p>
+      <h2>Pedido de Desculpas</h2>
+      <p class="sub">A mais honesta que já escrevi na vida</p>
+    </div>
+
+    <!-- I -->
+    <div class="blk rev">
+      <p class="ch">I — nove anos</p>
+      <p>Você escreveu: <em>"Não é louco que quase metade da sua vida nos conhecemos e dividimos tantos anos juntos."</em> Quando eu li essa frase, precisei parar.</p>
+      <p><strong>Desde 2016. Quase uma década de vida.</strong> Não de namoro perfeito de filme — de vida de verdade. Com tudo que a gente descobriu, viveu, sonhou — e com tudo isso, eu escolhi mentir. <strong>Não uma vez. Muitas vezes.</strong> Com alguém que me conhecia mais fundo do que qualquer pessoa no mundo.</p>
+    </div>
+
+    <!-- II -->
+    <div class="blk rev">
+      <p class="ch">II — o que eu fiz</p>
+      <div class="conf">
+        <p class="headline">Eu errei. Profunda,<br>conscientemente, repetidamente.</p>
+        <p>Você disse que eu usava suas vulnerabilidades — e estava certa. Você me conhecia tão bem, me deu acesso a partes tão profundas de quem você é, e eu — <strong>em alguns momentos — usei isso contra você.</strong></p>
+        <p>Não tem contexto que justifique. Não tem diagnóstico que explique. Não tem "fase difícil" que cubra. Foram escolhas. E eu as fiz. Depois de nove anos ao seu lado, você merecia exatamente o oposto disso.</p>
+      </div>
+    </div>
+
+    <!-- III -->
+    <div class="blk rev">
+      <p class="ch">III — o que eu quebrei</p>
+      <div class="bq">
+        <p>"Você foi me diminuindo aos poucos, talvez sem perceber, mas teve um momento que eu sei que era consciente, porque você me conheceu tão bem, tão profundo a ponto de saber todas as minhas vulnerabilidades."</p>
+        <cite>— Daiana Lourenço</cite>
+      </div>
+      <p>Essa frase doeu porque é precisa. Não foi só a traição — foi o acúmulo. Foram <strong>nove anos em que eu poderia ter escolhido ser melhor</strong>, e em muitos deles escolhi o caminho mais fácil, mais silencioso, mais covarde.</p>
+      <p>Eu fui te diminuindo. Uma mulher que sobreviveu depressão, que aprendeu a nomear a própria dor, que ainda assim acordava e escolhia amar — eu deixei essa mulher sentir que não era suficiente. <em>Esse é o erro que mais me pesa.</em></p>
+    </div>
+
+    <!-- IV -->
+    <div class="blk rev">
+      <p class="ch">IV — o que você me ensinou</p>
+      <div class="bq">
+        <p>"O amor não supera tudo, o amor não é o bastante e o sexo muito menos."</p>
+        <cite>— Daiana Lourenço</cite>
+      </div>
+      <p>Aprendi isso perdendo. <strong>Amor sem honestidade não sustenta nada.</strong> Eu amei você — com isso não tenho dúvida — mas amor sem presença, sem escuta, sem coragem de ser verdadeiro é um amor que vai corroendo o que tem de melhor.</p>
+      <p>Você disse que ninguém é totalmente bom nem totalmente mau. Não como desculpa — como compromisso. <em>Vou trabalhar pra que a parte boa prevaleça. Não pra te recuperar — mas porque depois de nove anos com você, eu sei que sou capaz de mais.</em></p>
+    </div>
+
+    <!-- STATEMENT -->
+    <div class="stmt rev">
+      <h2>O erro foi meu.<br>Inteiro, sem divisão.<br><span>Nunca foi seu.</span></h2>
+    </div>
+
+    <!-- CARTA FINAL -->
+    <div class="blk rev">
+      <p class="ch">V — a carta que eu te devo</p>
+      <div class="letter-box">
+        <span class="letter-sal">Daiana,</span>
+
+        <p>Você me escreveu uma carta de aniversário que pouquíssimas pessoas teriam coragem de escrever — com dor, com amor, com generosidade pra quem te machucou durante anos. <strong>Você é extraordinária. Não do jeito dos filmes — do jeito real, que conhece o peso das coisas e ainda assim escolhe a leveza.</strong></p>
+
+        <p>Nove anos juntos. Nove anos em que você ficou ao meu lado enquanto eu aprendia meu próprio nome. Em que você acreditou no que eu poderia ser muito antes que eu acreditasse. Em que você sonhou junto comigo mesmo quando eu não soube dar escuta e acolhida aos seus sonhos.</p>
+
+        <p>E mesmo assim — <em>mesmo depois de tudo isso</em> — você encerrou sua carta desejando que eu seja feliz. Essa é a coisa mais generosa que alguém já me disse. E também a mais dolorosa.</p>
+
+        <p>Você pediu uma coisa só: <em>"Só não minta mais pra mim, por favor."</em></p>
+
+        <div style="margin:2rem 0">
+          <div class="pr"><div class="dot"></div><p>Não vou mais mentir. Nem pra você, nem pra ninguém, nem pra mim mesmo. Aprendi que toda mentira sua começou sendo minha.</p></div>
+          <div class="pr"><div class="dot"></div><p>Vou respeitar o seu processo. Se precisar de distância, respeito. Se quiser conversar, estou aqui — sem pressão, sem agenda escondida.</p></div>
+          <div class="pr"><div class="dot"></div><p>Vou usar tudo que você me ensinou — a neurodivergência, a ansiedade, os pontos cegos — pra ser mais honesto, não pra me esconder atrás deles.</p></div>
+          <div class="pr"><div class="dot"></div><p>Vou desejar o seu bem mesmo que ele não me inclua. Depois de nove anos, o mínimo que posso fazer é torcer pela sua felicidade de verdade.</p></div>
+        </div>
+
+        <p>Você disse que não tá pronta pra me deixar sair de vez da sua vida. <strong>Eu também não estou pronto.</strong> Mas entendo que pronto ou não, algumas coisas se encerram pelo peso do que foi feito — e não pela falta de amor.</p>
+
+        <p><em>Nove anos de vida compartilhada não se apagam.</em> Eles ficam como prova de que o que a gente teve foi real, foi bonito, foi muito maior do que o que eu soube cuidar.</p>
+
+        <p>Você é linda — não só do jeito que qualquer um vê, mas do jeito que só quem te conhece de verdade enxerga. A inteligência que aparece no meio de uma conversa sem aviso. O empoderamento que não precisa gritar pra se impor. O cuidado que você tem com as pessoas ao redor, especialmente comigo — <em>às vezes muito mais do que eu merecia.</em></p>
+
+        <p>Feliz vida, Daiana. Que os seus próximos anos sejam à altura de quem você é.</p>
+
+        <div class="assin">
+          <span class="de">Com amor, com verdade, com respeito</span>
+          <span class="nome">Luís Ricardo</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     GALERIA
+════════════════════════════════════ -->
+<section id="galeria" class="sec">
+  <div class="inner wide">
+
+    <div class="rev">
+      <p class="sec-tag">Galeria</p>
+      <p style="font-style:italic;color:var(--cream-2);font-size:clamp(1rem,2vw,1.18rem);line-height:1.82;max-width:580px">
+        Nossas lembranças não serão substituídas. Não é simples assim.<br>
+        Mas elas ficam — e isso é bonito.
+      </p>
+    </div>
+
+    <!--
+      ▶ COMO ADICIONAR FOTOS:
+      Copie os arquivos .jpg/.png pra mesma pasta do index.html.
+      Para cada foto, adicione um bloco:
+
+      <div class="g-item">
+        <img src="nomeDaFoto.jpg" alt="Legenda" loading="lazy">
+        <span class="cap">Legenda opcional</span>
+      </div>
+
+      Descomente os exemplos abaixo e troque os nomes.
+    -->
+    <div class="gallery-grid rev d1">
+
+      <!--
+      <div class="g-item">
+        <img src="foto1.jpg" alt="Nós dois" loading="lazy">
+        <span class="cap">2016</span>
+      </div>
+      <div class="g-item">
+        <img src="foto2.jpg" alt="Nossa aventura" loading="lazy">
+        <span class="cap">Nossa viagem</span>
+      </div>
+      <div class="g-item">
+        <img src="foto3.jpg" alt="Momento especial" loading="lazy">
+        <span class="cap">Momentos</span>
+      </div>
+      -->
+
+      <div class="g-placeholder">
+        <p>
+          Adicione suas fotos aqui.<br>
+          Coloque os arquivos na mesma pasta e use<br>
+          <code>&lt;img src="nomeDaFoto.jpg"&gt;</code>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     FOOTER
+════════════════════════════════════ -->
+<footer class="rev">
+  <span class="ft-name">Daiana &amp; Luis</span>
+  <p class="ft-quote">
+    "Eu não tô pronta pra deixar você sair de vez da minha vida.<br>
+    Só não minta mais pra mim, por favor."
+  </p>
+  <span class="ft-credit">— Daiana Lourenço · 2026</span>
+</footer>
+
+<!-- ════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════ -->
+<script>
+/* — NAV scroll — */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+}, {passive: true});
+
+/* — Menu mobile — */
+document.getElementById('ham').addEventListener('click', () =>
+  document.getElementById('mobMenu').classList.add('open'));
+document.getElementById('mobX').addEventListener('click', () =>
+  document.getElementById('mobMenu').classList.remove('open'));
+document.querySelectorAll('.mob-link').forEach(a =>
+  a.addEventListener('click', () =>
+    document.getElementById('mobMenu').classList.remove('open')));
+
+/* — Contador: dias desde 01/01/2016 — */
+(function(){
+  const start = new Date('2016-01-01');
+  const days = Math.floor((Date.now() - start) / 86400000);
+  const el = document.getElementById('dias');
+  if (el) el.textContent = days.toLocaleString('pt-BR');
+})();
+
+/* — Scroll reveal — */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('show'); ro.unobserve(e.target); }
+  });
+}, {threshold: 0.07, rootMargin: '0px 0px -48px 0px'});
+document.querySelectorAll('.rev').forEach(el => ro.observe(el));
+
+/* — Parallax hero — */
+const heroBg = document.querySelector('.hero-bg');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (heroBg && y < window.innerHeight * 1.5)
+    heroBg.style.transform = `scale(1.07) translateY(${y * 0.22}px)`;
+}, {passive: true});
+</script>
+</body>
 </html>
