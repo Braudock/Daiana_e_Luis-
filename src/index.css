@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gold: #c9a96e;
+  --color-gold-light: #e8d5a3;
+  --color-rose: #d47fa0;
+  --color-dark: #0a0608;
+  --font-display: 'Great Vibes', cursive;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-dark);
+    color: #f0e8df;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+}
+
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
